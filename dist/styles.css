@@ -878,6 +878,11 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
 }
 
+.hover\:text-blue-700:hover {
+  --tw-text-opacity: 1 !important;
+  color: rgb(29 78 216 / var(--tw-text-opacity)) !important;
+}
+
 .group:hover .group-hover\:block {
   display: block !important;
 }
