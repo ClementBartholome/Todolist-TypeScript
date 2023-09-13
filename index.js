@@ -1,8 +1,23 @@
 "use strict";
-class TodoApp {
+class Todo {
+    constructor(text, completed = false, createdAt = new Date()) {
+        this.text = text;
+        this.completed = completed;
+        this.createdAt = createdAt;
+    }
+    toggleCompletion() {
+        this.completed = !this.completed;
+    }
+}
+class TodoList {
     constructor() {
         this.todos = [];
-        // Initialisation des éléments DOM
+        this.initializeDOMElements();
+        this.addEventListeners();
+        this.loadTodos();
+        this.renderTodoList();
+    }
+    initializeDOMElements() {
         this.addTodoButton = this.getElement("add");
         this.todoList = this.getElement("list");
         this.todoInput = this.getElement("todo-input");
@@ -11,18 +26,17 @@ class TodoApp {
             (this.activeFilter = this.getElement("active")),
             (this.completedFilter = this.getElement("completed")),
         ];
-        // Ajout des écouteurs d'événements
+    }
+    addEventListeners() {
         this.allFilter.addEventListener("click", () => this.filterTodos("all"));
         this.activeFilter.addEventListener("click", () => this.filterTodos("active"));
         this.completedFilter.addEventListener("click", () => this.filterTodos("completed"));
-        this.addTodoButton.addEventListener("click", () => this.addTodo());
+        this.addTodoButton.addEventListener("click", () => this.addTodo(event));
         this.todoInput.addEventListener("keyup", (event) => {
             if (event.key === "Enter") {
-                this.addTodo();
+                this.addTodo(event);
             }
         });
-        this.loadTodos();
-        this.renderTodoList();
     }
     getElement(id) {
         return document.getElementById(id);
@@ -39,20 +53,26 @@ class TodoApp {
     styleFilterButton(filter) {
         this.filterButtons.forEach((button) => {
             if (button.id === filter) {
-                button.classList.add("text-blue-500");
+                button.classList.add("text-white", "bg-blue-500", "font-semibold");
+                button.classList.remove("text-blue-700");
             }
             else {
-                button.classList.remove("text-blue-500");
+                button.classList.add("text-blue-700");
+                button.classList.remove("text-white", "bg-blue-500", "font-semibold");
             }
         });
     }
-    addTodo() {
+    addTodo(event) {
+        event.preventDefault();
         const inputValue = this.todoInput.value.trim();
         if (inputValue) {
-            this.todos.push({ text: inputValue, completed: false });
+            const todo = new Todo(inputValue);
+            this.todos.push(todo);
+            todo.createdAt = new Date();
             this.todoInput.value = "";
             this.saveTodos();
             this.renderTodoList();
+            this.styleFilterButton("all");
         }
     }
     renderTodoList(filteredTodos) {
@@ -60,6 +80,7 @@ class TodoApp {
         if (!filteredTodos) {
             filteredTodos = this.todos;
         }
+        filteredTodos.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
         filteredTodos.forEach((todo, index) => {
             this.renderTodo(todo, index);
         });
@@ -174,16 +195,18 @@ class TodoApp {
         this.renderTodoList();
     }
     toggleCompletion(index) {
-        this.todos[index].completed = !this.todos[index].completed;
+        this.todos[index].toggleCompletion();
         this.saveTodos();
         this.renderTodoList();
     }
     loadTodos() {
         const storedTodos = JSON.parse(localStorage.getItem("todos") || "[]");
-        this.todos = storedTodos;
+        this.todos = storedTodos.map((todoData) => {
+            return new Todo(todoData.text, todoData.completed, new Date(todoData.createdAt));
+        });
     }
     saveTodos() {
         localStorage.setItem("todos", JSON.stringify(this.todos));
     }
 }
-const todoApp = new TodoApp();
+const todoApp = new TodoList();

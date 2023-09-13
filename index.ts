@@ -1,20 +1,33 @@
-interface Todo {
-  text: string;
-  completed: boolean;
+class Todo {
+  constructor(
+    public text: string,
+    public completed: boolean = false,
+    public createdAt: Date = new Date()
+  ) {}
+
+  toggleCompletion() {
+    this.completed = !this.completed;
+  }
 }
 
-class TodoApp {
-  private addTodoButton: HTMLElement;
-  private todoList: HTMLElement;
-  private todoInput: HTMLInputElement;
-  private filterButtons: HTMLElement[];
-  private allFilter: HTMLElement;
-  private activeFilter: HTMLElement;
-  private completedFilter: HTMLElement;
+class TodoList {
   private todos: Todo[] = [];
+  private addTodoButton!: HTMLElement;
+  private todoList!: HTMLElement;
+  private todoInput!: HTMLInputElement;
+  private filterButtons!: HTMLElement[];
+  private allFilter!: HTMLElement;
+  private activeFilter!: HTMLElement;
+  private completedFilter!: HTMLElement;
 
   constructor() {
-    // Initialisation des éléments DOM
+    this.initializeDOMElements();
+    this.addEventListeners();
+    this.loadTodos();
+    this.renderTodoList();
+  }
+
+  private initializeDOMElements() {
     this.addTodoButton = this.getElement("add")!;
     this.todoList = this.getElement("list")!;
     this.todoInput = this.getElement("todo-input") as HTMLInputElement;
@@ -23,8 +36,9 @@ class TodoApp {
       (this.activeFilter = this.getElement("active")!),
       (this.completedFilter = this.getElement("completed")!),
     ];
+  }
 
-    // Ajout des écouteurs d'événements
+  private addEventListeners() {
     this.allFilter.addEventListener("click", () => this.filterTodos("all"));
     this.activeFilter.addEventListener("click", () =>
       this.filterTodos("active")
@@ -33,15 +47,12 @@ class TodoApp {
       this.filterTodos("completed")
     );
 
-    this.addTodoButton.addEventListener("click", () => this.addTodo());
+    this.addTodoButton.addEventListener("click", () => this.addTodo(event));
     this.todoInput.addEventListener("keyup", (event) => {
       if (event.key === "Enter") {
-        this.addTodo();
+        this.addTodo(event);
       }
     });
-
-    this.loadTodos();
-    this.renderTodoList();
   }
 
   private getElement(id: string): HTMLElement | null {
@@ -63,20 +74,26 @@ class TodoApp {
   private styleFilterButton(filter: string) {
     this.filterButtons.forEach((button) => {
       if (button.id === filter) {
-        button.classList.add("text-blue-500");
+        button.classList.add("text-white", "bg-blue-500", "font-semibold");
+        button.classList.remove("text-blue-700");
       } else {
-        button.classList.remove("text-blue-500");
+        button.classList.add("text-blue-700");
+        button.classList.remove("text-white", "bg-blue-500", "font-semibold");
       }
     });
   }
 
-  private addTodo() {
+  private addTodo(event: any) {
+    event.preventDefault();
     const inputValue = this.todoInput.value.trim();
     if (inputValue) {
-      this.todos.push({ text: inputValue, completed: false });
+      const todo = new Todo(inputValue);
+      this.todos.push(todo);
+      todo.createdAt = new Date();
       this.todoInput.value = "";
       this.saveTodos();
       this.renderTodoList();
+      this.styleFilterButton("all");
     }
   }
 
@@ -86,6 +103,8 @@ class TodoApp {
     if (!filteredTodos) {
       filteredTodos = this.todos;
     }
+
+    filteredTodos.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
     filteredTodos.forEach((todo, index) => {
       this.renderTodo(todo, index);
@@ -239,14 +258,20 @@ class TodoApp {
   }
 
   private toggleCompletion(index: number) {
-    this.todos[index].completed = !this.todos[index].completed;
+    this.todos[index].toggleCompletion();
     this.saveTodos();
     this.renderTodoList();
   }
 
   private loadTodos() {
     const storedTodos = JSON.parse(localStorage.getItem("todos") || "[]");
-    this.todos = storedTodos;
+    this.todos = storedTodos.map((todoData: any) => {
+      return new Todo(
+        todoData.text,
+        todoData.completed,
+        new Date(todoData.createdAt)
+      );
+    });
   }
 
   private saveTodos() {
@@ -254,4 +279,4 @@ class TodoApp {
   }
 }
 
-const todoApp = new TodoApp();
+const todoApp = new TodoList();
