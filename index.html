@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="./dist/styles.css" />
+    <script
+      src="https://kit.fontawesome.com/7c85ecb699.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>Todolist</title>
+  </head>
+  <body class="text-xl">
+    <div id="app" class="m-auto max-w-xl px-12 py-6">
+      <header class="flex justify-between items-center flex-wrap">
+        <h1 class="uppercase text-4xl font-bold">Todolist Typescript</h1>
+        <form class="w-full shadow-xl rounded-xl flex mt-8 overflow-hidden">
+          <input
+            type="text"
+            id="todo-input"
+            class="h-14 border-none p-8 flex-grow text-xl outline-none"
+            placeholder="Add a task"
+          />
+          <button
+            class="border-none inline-block outline-none px-6 uppercase bg-slate-300 font-bold hover:bg-slate-400 transition-colors duration-300 ease-in-out text-white"
+            id="add"
+          >
+            Add
+          </button>
+        </form>
+      </header>
+      <main
+        class="mt-4 w-full shadow-xl rounded-xl flex mt-8 overflow-hidden p-8 flex flex-col gap-2"
+      >
+        <ul id="list"></ul>
+        <div class="filters flex gap-4 m-auto">
+          <button id="all" class="text-blue-500">All</button>
+          <button id="active">Active</button>
+          <button id="completed">Completed</button>
+        </div>
+      </main>
+    </div>
+    <script src="./index.js"></script>
+  </body>
+</html>
