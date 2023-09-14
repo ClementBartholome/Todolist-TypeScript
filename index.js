@@ -1,4 +1,4 @@
-"use strict";
+import Sortable from "sortablejs";
 class Todo {
     constructor(text, completed = false, createdAt = new Date()) {
         this.text = text;
@@ -77,18 +77,40 @@ class TodoList {
     }
     renderTodoList(filteredTodos) {
         this.todoList.innerHTML = "";
-        if (!filteredTodos) {
-            filteredTodos = this.todos;
-        }
-        filteredTodos.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-        filteredTodos.forEach((todo, index) => {
-            this.renderTodo(todo, index);
-        });
-        if (this.todos.length > 0) {
-            this.renderTodoInfo();
-        }
-        else {
-            this.renderEmptyMessage();
+        if (this.todoList) {
+            new Sortable(this.todoList, {
+                animation: 150,
+                onEnd: (evt) => {
+                    // Cette fonction est appelée lorsque l'utilisateur relâche l'élément glissé
+                    // Vous pouvez mettre à jour l'ordre des todos ici
+                    const startIndex = evt.oldIndex;
+                    const endIndex = evt.newIndex;
+                    if (startIndex !== undefined && endIndex !== undefined) {
+                        // Mettez à jour l'ordre des todos dans votre tableau this.todos
+                        const [removed] = this.todos.splice(startIndex, 1);
+                        if (removed !== undefined) {
+                            this.todos.splice(endIndex, 0, removed);
+                            // Enregistrez les todos mis à jour
+                            this.saveTodos();
+                        }
+                    }
+                },
+            });
+            if (!filteredTodos) {
+                filteredTodos = this.todos;
+            }
+            // filteredTodos.sort(
+            //   (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+            // );
+            filteredTodos.forEach((todo, index) => {
+                this.renderTodo(todo, index);
+            });
+            if (this.todos.length > 0) {
+                this.renderTodoInfo();
+            }
+            else {
+                this.renderEmptyMessage();
+            }
         }
     }
     renderTodoInfo() {

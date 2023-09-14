@@ -1,3 +1,5 @@
+import Sortable from "sortablejs";
+
 class Todo {
   constructor(
     public text: string,
@@ -100,20 +102,41 @@ class TodoList {
   private renderTodoList(filteredTodos?: Todo[]) {
     this.todoList.innerHTML = "";
 
-    if (!filteredTodos) {
-      filteredTodos = this.todos;
-    }
+    if (this.todoList) {
+      new Sortable(this.todoList, {
+        animation: 150,
+        onEnd: (evt) => {
+          const startIndex = evt.oldIndex;
+          const endIndex = evt.newIndex;
 
-    filteredTodos.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+          if (startIndex !== undefined && endIndex !== undefined) {
+            const [removed] = this.todos.splice(startIndex, 1);
 
-    filteredTodos.forEach((todo, index) => {
-      this.renderTodo(todo, index);
-    });
+            if (removed !== undefined) {
+              this.todos.splice(endIndex, 0, removed);
+              this.saveTodos();
+            }
+          }
+        },
+      });
 
-    if (this.todos.length > 0) {
-      this.renderTodoInfo();
-    } else {
-      this.renderEmptyMessage();
+      if (!filteredTodos) {
+        filteredTodos = this.todos;
+      }
+
+      // filteredTodos.sort(
+      //   (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+      // );
+
+      filteredTodos.forEach((todo, index) => {
+        this.renderTodo(todo, index);
+      });
+
+      if (this.todos.length > 0) {
+        this.renderTodoInfo();
+      } else {
+        this.renderEmptyMessage();
+      }
     }
   }
 
