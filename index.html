@@ -42,20 +42,20 @@
         <div class="filters flex gap-4 m-auto">
           <button
             id="all"
-            class="bg-blue-500 hover:bg-blue-500 text-white py-2 px-4 border border-blue-500 rounded"
+            class="bg-blue-500 hover:bg-blue-500 text-white py-2 px-4 border border-blue-500 rounded-full"
           >
             All
             <!-- bg-transparent hover:bg-blue-500 text-blue-700 All -->
           </button>
           <button
             id="active"
-            class="bg-transparent hover:bg-blue-500 hover:text-white text-blue-700 py-2 px-4 border border-blue-500 rounded"
+            class="bg-transparent hover:bg-blue-500 hover:text-white text-blue-700 py-2 px-4 border border-blue-500 rounded-full"
           >
             Active
           </button>
           <button
             id="completed"
-            class="bg-transparent hover:bg-blue-500 hover:text-white text-blue-700 py-2 px-4 border border-blue-500 rounded"
+            class="bg-transparent hover:bg-blue-500 hover:text-white text-blue-700 py-2 px-4 border border-blue-500 rounded-full"
           >
             Completed
           </button>
@@ -63,11 +63,31 @@
         <span class="m-auto text-gray-500"
           >Drag and drop to reorder the list</span
         >
-        <div id="pomodoro-timer" class="align-center text-center">
-          <h2>Pomodoro Timer</h2>
-          <p id="timer">25:00</p>
-          <button id="start-button">Start</button>
-          <button id="reset-button">Reset</button>
+        <div
+          id="pomodoro-timer"
+          class="flex flex-col gap-2 items-center justify-center"
+        >
+          <h2 class="text-3xl font-semibold m-0">Pomodoro Timer</h2>
+          <div
+            id="timer"
+            class="bg-white rounded-full p-4 shadow-2xl text-2xl font-bold w-32 text-center"
+          >
+            25:00
+          </div>
+          <div class="flex gap-2">
+            <button
+              id="start-button"
+              class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full shadow-lg"
+            >
+              Start
+            </button>
+            <button
+              id="reset-button"
+              class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full shadow-lg"
+            >
+              Reset
+            </button>
+          </div>
         </div>
         <iframe
           style="border-radius: 12px"

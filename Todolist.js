@@ -127,7 +127,7 @@ class TodoList {
                 : `${this.todos.length} todos left`;
         leftTodos.classList.add("text-gray-500");
         const clearButton = this.createButton("Clear All");
-        clearButton.classList.add("text-red-500", "cursor-pointer", "p-2", "rounded", "border", "border-red-500", "hover:bg-red-500", "hover:text-white");
+        clearButton.classList.add("text-red-500", "cursor-pointer", "p-2", "rounded-full", "border", "border-red-500", "hover:bg-red-500", "hover:text-white");
         clearButton.addEventListener("click", () => this.clearAll());
         todoInfos.appendChild(leftTodos);
         todoInfos.appendChild(clearButton);

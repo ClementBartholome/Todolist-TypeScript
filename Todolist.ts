@@ -164,7 +164,7 @@ class TodoList {
       "text-red-500",
       "cursor-pointer",
       "p-2",
-      "rounded",
+      "rounded-full",
       "border",
       "border-red-500",
       "hover:bg-red-500",
