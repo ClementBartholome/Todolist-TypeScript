@@ -102,6 +102,28 @@ class TodoList {
   private renderTodoList(filteredTodos?: Todo[]) {
     this.todoList.innerHTML = "";
 
+    this.setupDragAndDrop();
+
+    if (!filteredTodos) {
+      filteredTodos = this.todos;
+    }
+
+    // filteredTodos.sort(
+    //   (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+    // );
+
+    filteredTodos.forEach((todo, index) => {
+      this.renderTodo(todo, index);
+    });
+
+    if (this.todos.length > 0) {
+      this.renderTodoInfo();
+    } else {
+      this.renderEmptyMessage();
+    }
+  }
+
+  private setupDragAndDrop() {
     if (this.todoList) {
       new Sortable(this.todoList, {
         animation: 150,
@@ -119,24 +141,6 @@ class TodoList {
           }
         },
       });
-
-      if (!filteredTodos) {
-        filteredTodos = this.todos;
-      }
-
-      // filteredTodos.sort(
-      //   (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-      // );
-
-      filteredTodos.forEach((todo, index) => {
-        this.renderTodo(todo, index);
-      });
-
-      if (this.todos.length > 0) {
-        this.renderTodoInfo();
-      } else {
-        this.renderEmptyMessage();
-      }
     }
   }
 
@@ -175,6 +179,7 @@ class TodoList {
 
   private renderEmptyMessage() {
     const emptyMessage = this.createParagraphElement("You have no todos!");
+    emptyMessage.classList.add("text-gray-500", "mt-4");
     this.todoList.appendChild(emptyMessage);
   }
 

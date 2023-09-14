@@ -77,40 +77,39 @@ class TodoList {
     }
     renderTodoList(filteredTodos) {
         this.todoList.innerHTML = "";
+        this.initializeDragAndDrop();
+        if (!filteredTodos) {
+            filteredTodos = this.todos;
+        }
+        // filteredTodos.sort(
+        //   (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+        // );
+        filteredTodos.forEach((todo, index) => {
+            this.renderTodo(todo, index);
+        });
+        if (this.todos.length > 0) {
+            this.renderTodoInfo();
+        }
+        else {
+            this.renderEmptyMessage();
+        }
+    }
+    initializeDragAndDrop() {
         if (this.todoList) {
             new Sortable(this.todoList, {
                 animation: 150,
                 onEnd: (evt) => {
-                    // Cette fonction est appelée lorsque l'utilisateur relâche l'élément glissé
-                    // Vous pouvez mettre à jour l'ordre des todos ici
                     const startIndex = evt.oldIndex;
                     const endIndex = evt.newIndex;
                     if (startIndex !== undefined && endIndex !== undefined) {
-                        // Mettez à jour l'ordre des todos dans votre tableau this.todos
                         const [removed] = this.todos.splice(startIndex, 1);
                         if (removed !== undefined) {
                             this.todos.splice(endIndex, 0, removed);
-                            // Enregistrez les todos mis à jour
                             this.saveTodos();
                         }
                     }
                 },
             });
-            if (!filteredTodos) {
-                filteredTodos = this.todos;
-            }
-            // filteredTodos.sort(
-            //   (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-            // );
-            filteredTodos.forEach((todo, index) => {
-                this.renderTodo(todo, index);
-            });
-            if (this.todos.length > 0) {
-                this.renderTodoInfo();
-            }
-            else {
-                this.renderEmptyMessage();
-            }
         }
     }
     renderTodoInfo() {
@@ -136,6 +135,7 @@ class TodoList {
     }
     renderEmptyMessage() {
         const emptyMessage = this.createParagraphElement("You have no todos!");
+        emptyMessage.classList.add("text-gray-500", "mt-4");
         this.todoList.appendChild(emptyMessage);
     }
     renderTodo(todo, index) {
