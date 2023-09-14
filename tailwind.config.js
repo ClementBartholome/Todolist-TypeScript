@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./index.html", "./index.js"],
+  content: ["./index.html", "./Todolist.js", "./Pomodor.js"],
   theme: {},
   plugins: [],
   variants: {},

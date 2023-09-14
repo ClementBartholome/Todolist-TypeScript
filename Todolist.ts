@@ -77,7 +77,7 @@ class TodoList {
     this.filterButtons.forEach((button) => {
       if (button.id === filter) {
         button.classList.add("text-white", "bg-blue-500", "font-semibold");
-        button.classList.remove("text-blue-700");
+        button.classList.remove("text-blue-700", "bg-transparent");
       } else {
         button.classList.add("text-blue-700", "hover:text-white");
         button.classList.remove("text-white", "bg-blue-500", "font-semibold");

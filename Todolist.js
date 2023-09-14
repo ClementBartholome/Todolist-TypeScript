@@ -54,7 +54,7 @@ class TodoList {
         this.filterButtons.forEach((button) => {
             if (button.id === filter) {
                 button.classList.add("text-white", "bg-blue-500", "font-semibold");
-                button.classList.remove("text-blue-700");
+                button.classList.remove("text-blue-700", "bg-transparent");
             }
             else {
                 button.classList.add("text-blue-700", "hover:text-white");
@@ -77,7 +77,7 @@ class TodoList {
     }
     renderTodoList(filteredTodos) {
         this.todoList.innerHTML = "";
-        this.initializeDragAndDrop();
+        this.setupDragAndDrop();
         if (!filteredTodos) {
             filteredTodos = this.todos;
         }
@@ -94,7 +94,7 @@ class TodoList {
             this.renderEmptyMessage();
         }
     }
-    initializeDragAndDrop() {
+    setupDragAndDrop() {
         if (this.todoList) {
             new Sortable(this.todoList, {
                 animation: 150,

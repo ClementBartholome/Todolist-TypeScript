@@ -16,7 +16,7 @@
     </script>
     <title>Todolist</title>
   </head>
-  <body class="text-xl">
+  <body class="text-xl font-mono">
     <div id="app" class="m-auto max-w-xl px-12 py-6">
       <header class="flex justify-between items-center flex-wrap">
         <h1 class="uppercase text-4xl font-bold">Todolist Typescript</h1>
@@ -63,8 +63,15 @@
         <span class="m-auto text-gray-500"
           >Drag and drop to reorder the list</span
         >
+        <div id="pomodoro-timer" class="align-center text-center">
+          <h2>Pomodoro Timer</h2>
+          <p id="timer">25:00</p>
+          <button id="start-button">Start</button>
+          <button id="reset-button">Reset</button>
+        </div>
       </main>
     </div>
-    <script type="module" src="./index.js"></script>
+    <script type="module" src="./Todolist.js"></script>
+    <script type="module" src="./Pomodoro.js"></script>
   </body>
 </html>
