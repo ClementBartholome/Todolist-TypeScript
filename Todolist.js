@@ -41,6 +41,12 @@ class TodoList {
     getElement(id) {
         return document.getElementById(id);
     }
+    toggleFilterButtonsVisibility() {
+        const shouldShowButtons = this.todos.length > 0;
+        this.filterButtons.forEach((button) => {
+            button.style.display = shouldShowButtons ? "block" : "none";
+        });
+    }
     filterTodos(filter) {
         this.styleFilterButton(filter);
         const filteredTodos = filter === "active"
@@ -89,10 +95,18 @@ class TodoList {
         });
         if (this.todos.length > 0) {
             this.renderTodoInfo();
+            this.toggleDragAndDropMessage();
         }
         else {
             this.renderEmptyMessage();
+            this.toggleDragAndDropMessage();
         }
+        this.toggleFilterButtonsVisibility();
+    }
+    toggleDragAndDropMessage() {
+        const dragAndDropMessage = this.getElement("drag-and-drop-message");
+        dragAndDropMessage.style.display =
+            this.todos.length >= 1 ? "block" : "none";
     }
     setupDragAndDrop() {
         if (this.todoList) {

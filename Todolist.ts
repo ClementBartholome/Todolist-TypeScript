@@ -61,6 +61,13 @@ class TodoList {
     return document.getElementById(id);
   }
 
+  private toggleFilterButtonsVisibility() {
+    const shouldShowButtons = this.todos.length > 0;
+    this.filterButtons.forEach((button) => {
+      button.style.display = shouldShowButtons ? "block" : "none";
+    });
+  }
+
   private filterTodos(filter: string) {
     this.styleFilterButton(filter);
     const filteredTodos =
@@ -118,9 +125,18 @@ class TodoList {
 
     if (this.todos.length > 0) {
       this.renderTodoInfo();
+      this.toggleDragAndDropMessage();
     } else {
       this.renderEmptyMessage();
+      this.toggleDragAndDropMessage();
     }
+    this.toggleFilterButtonsVisibility();
+  }
+
+  private toggleDragAndDropMessage() {
+    const dragAndDropMessage = this.getElement("drag-and-drop-message")!;
+    dragAndDropMessage.style.display =
+      this.todos.length >= 1 ? "block" : "none";
   }
 
   private setupDragAndDrop() {
