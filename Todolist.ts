@@ -1,6 +1,12 @@
 import Sortable from "sortablejs";
 
-class Todo {
+interface Todo {
+  text: string;
+  completed: boolean;
+  createdAt: Date;
+}
+
+class Todo implements Todo {
   constructor(
     public text: string,
     public completed: boolean = false,
